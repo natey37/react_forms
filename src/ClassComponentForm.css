@@ -1,0 +1,39 @@
+#classComponentForm {
+    position: absolute;
+    text-align: left;
+    width: 40%;
+    height: 80%;
+    background-color: #FCC42C;
+    padding: 40px;
+    top: 5%;
+    left: 26%;
+    border: solid;
+    border-color: black;
+    border-width: 5px;
+    border-radius: 10px;
+}
+
+#classComponentForm h2 {
+    text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  width: 100%;
+}
+
+form label {
+    font-weight: bold;
+    text-align: left;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+form input {
+    width: 95%;
+    height: 40px;
+    font-size: 20px;
+    font-family: "Work Sans", sans-serif;
+}
