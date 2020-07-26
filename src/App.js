@@ -27,7 +27,7 @@ function App() {
         </button>
         {classComponentForm && <ClassComponentForm></ClassComponentForm>}
         {functionalComponentForm && 
-        <FunctionalComponentForm></FunctionalComponentForm>}
+        <FunctionalComponentForm handleClick={handleFunctionalComponentClick}></FunctionalComponentForm>}
     </div>
   );
 }
