@@ -36,8 +36,21 @@ const inputStyle = {
     fontFamily: "Work Sans, sans-serif"
 }
 
+const errorStyle = {
+    color: "red",
+    fontWeight: 'bold',
+    fontSize: '15px'
+}
 
-function FunctionalComponentForm(){
+const buttonStyle = {
+    fontSize: '20px',
+    fontFamily: "Work Sans, sans-serif",
+    backgroundColor: 'black',
+    color: "#FCC42C"
+}
+
+
+function FunctionalComponentForm(props){
 
     const [form, setForm] = useState({
             name: '', 
@@ -47,6 +60,8 @@ function FunctionalComponentForm(){
             date: new Date().toISOString().slice(0,10)
         })
 
+    const [errors, setErrors] = useState({})
+
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -54,14 +69,72 @@ function FunctionalComponentForm(){
         })
     }
 
+    const [submitted, setSubmitted] = useState(false)
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if(handleValidation() === true){
+            props.handleClick()
+            setSubmitted(true)
+        }
+    }
+
+    const handleValidation = () => {
+        let errors = {}
+        let isFormValid = true 
+
+        if(!form.name){
+            isFormValid = false 
+            errors.name = "Name cannot be empty!"
+        } else if(typeof(form.name) !== undefined){
+            if(!form.name.match(/^[a-zA-Z ]+$/)){
+                isFormValid = false 
+                errors.name = "Name can only include letters!"
+            }
+        }
+
+        if(!form.email){
+            isFormValid = false
+            errors.email = "Email cannot be empty!"
+        } else if(typeof(form.email !== undefined)){
+            if(!form.email.match(/\S+@\S+\.\S+/)){
+                isFormValid = false 
+                errors.email = "Email must be in the format example@example.com"
+            }
+        }
+
+        if(!form.zipcode){
+            isFormValid = false
+            errors.zipcode = "Zipcode cannot be empty!"
+        } else if(typeof(form.zipcode !== undefined)){
+            if(!form.zipcode.match(/^[0-9\b]+$/)){
+                isFormValid = false 
+                errors.zipcode = "Zipcode must only include digits!"
+            } else if(form.zipcode.length !== 5){
+                isFormValid = false 
+                errors.zipcode = "Zipcode must be 5 digits!"
+            }
+        }
+
+        let todaysDate = new Date()
+       
+        if(form.date < new Date(todaysDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0,10)){
+            isFormValid = false
+            errors.date = `Please pick a date at least a week from today! ${new Date().toISOString().slice(0,10)}`
+        } 
+        
+        setErrors(errors)
+        return isFormValid
+    }
+ 
     return(
         <div style={functionalStyle}>
             <h2 style={{textAlign: 'center'}}>
                 Please Enter Your Information - Functional
             </h2>
-                <form style={formStyle}>
+                <form style={formStyle} onSubmit={handleSubmit}>
                     <label htmlFor='nameInput' style={labelStyle}>
-                        Name:
+                        Name: <span>*</span>
                     </label>
                     <input
                         style={inputStyle}
@@ -72,8 +145,10 @@ function FunctionalComponentForm(){
                         value={form.name}
                         onChange={(e) => handleChange(e)}
                     />
+                    <span style={errorStyle}>{errors.name}</span>
+
                     <label htmlFor='emailInput' style={labelStyle}>
-                        Email:
+                        Email: <span>*</span>
                     </label>
                     <input
                         style={inputStyle}
@@ -84,8 +159,10 @@ function FunctionalComponentForm(){
                         value={form.email}
                         onChange={(e) => handleChange(e)}
                     />
+                    <span style={errorStyle}>{errors.email}</span>
+
                     <label htmlFor='zipcodeInput' style={labelStyle}>
-                        Zipcode:
+                        Zipcode: <span>*</span>
                     </label>
                     <input
                         style={inputStyle}
@@ -96,8 +173,10 @@ function FunctionalComponentForm(){
                         value={form.zipcode}
                         onChange={(e) => handleChange(e)}
                     />
+                    <span style={errorStyle}>{errors.zipcode}</span>
+
                     <label htmlFor='dateInput' style={labelStyle}>
-                        Date:
+                        Date: <span>*</span>
                     </label>
                     <input
                         style={inputStyle}
@@ -107,6 +186,10 @@ function FunctionalComponentForm(){
                         value={form.date}
                         onChange={(e) => handleChange(e)}
                     />
+                    <span style={errorStyle}>{errors.date}</span>
+
+                    <br></br>
+                    <button style={buttonStyle}>Submit</button>
                 </form>
         </div>
     )
